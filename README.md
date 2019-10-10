@@ -30,6 +30,10 @@ appearances from the previous three years. As a result, the model does not proje
 In an attempt to remedy this without manually and arbitrarily altering plate appearances, a “pro-rate” button was 
 added which linearly transforms the plate appearance distribution to be centered around 600 plate appearances.
 
+Missing data was imputed using K-Nearest Neighbors (KNN) imputation using the 10 most comparable players from 2010-18. Due to computational resources and the strenuous task of Bayesian inference, principal components analysis (PCA) was used to obtain a lower-dimensional representation of the data and we only used the first 10 principal components for our computation. A similar approach was used to prepare the data for pitchers, however the size of the matrix made KNN imputation infeasible, so the Expectation Maximization (EM) algorithm was used to fill in missing values.
+
+The mathematical calculations cannot be carried out exactly, so variance of a player’s projected performance was estimated using a hierarchical Poisson regression using the “Just Another Gibbs Sampler” (JAGS) library in R. Parameter estimation was performed using Markov Chain Monte Carlo (MCMC) simulation and states were accepted using the Metropolis-Hastings (MH) algorithm. The estimated outcomes were then linearly combined using the Wins Above Replacement formula to create an uncertain estimate of WAR.
+
 For this app in particular, we chose the ex-ante Sharpe ratio as the method by which to evaluate risk, 
 due to its interpretability (excess return per unit of risk taken on by the investor / GM).
 We use our calculated league average 1.3 Wins Above Replacement 
